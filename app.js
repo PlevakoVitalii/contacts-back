@@ -3,6 +3,8 @@ const logger = require('morgan')
 const cors = require('cors')
 require('dotenv').config()
 
+const serverless = require("serverless-http"); // для deploy to netlify
+
 const authRouter = require('./routes/api/auth')
 const usersRouter = require('./routes/api/users')
 const contactsRouter = require('./routes/api/contacts')
@@ -29,4 +31,4 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message })
 })
 
-module.exports = app
+module.exports = serverless(app)

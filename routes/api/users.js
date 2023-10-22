@@ -2,7 +2,7 @@ const express = require('express');
 const CreateError = require('http-errors');
 const path = require('path');
 const fs = require('fs/promises');
-const Joi = require('joi');
+// const Joi = require('joi');
 // const Jimp = require("jimp"); // для редагування фото
 
 
