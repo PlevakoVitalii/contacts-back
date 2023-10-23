@@ -1,7 +1,8 @@
 const express = require('express')
-const logger = require('morgan')
 const cors = require('cors')
 const mongoose = require('mongoose')
+const CreateError = require('http-errors');
+const { Contact } = require('../models/contact');
 const serverless = require("serverless-http"); // для deploy to netlify
 require('dotenv').config()
 
@@ -21,28 +22,28 @@ mongoose.connect(DB_HOST)
     process.exit(1)
   })
 
-const authRouter = require('../routes/api/auth')
-const contactsRouter = require('../routes/api/contacts')
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
 router.get("/", async (req, res, next) => {
   try {
-    return res.json({
-      "name": "Vasa"
-    })
+
+    const result = await Contact.findById('651996a33db764dbc1c8773b')
+    if (!result) {
+      throw new CreateError(404, "Not found")
+    }
+    res.json(result)
   } catch (error) {
-    next(error);
+    if (error.message.includes("Cast to ObjectId failed")) {
+      error.status = 404;
+    }
+    next(error)
   }
 });
 
-app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
-app.use('/api/auth', authRouter)
-app.use('/api/contacts', contactsRouter)
 app.use('/', router)
 
 app.use((req, res) => {
