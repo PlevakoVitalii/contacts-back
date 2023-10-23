@@ -20,7 +20,6 @@ mongoose.connect(DB_HOST)
   })
 
 const authRouter = require('../routes/api/auth')
-const usersRouter = require('../routes/api/users')
 const contactsRouter = require('../routes/api/contacts')
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
@@ -31,7 +30,6 @@ app.use(express.json());
 app.use(express.static("public"));
 
 app.use('/api/auth', authRouter)
-app.use('/api/users', usersRouter)
 app.use('/api/contacts', contactsRouter)
 
 app.use((req, res) => {
