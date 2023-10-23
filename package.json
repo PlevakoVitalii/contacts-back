@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./server.js",
-    "dev": "cross-env NODE_ENV=development nodemon ./server.js",
+    "dev": "cross-env NODE_ENV=development nodemon ./functions/app.js",
     "test": "jest",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
@@ -26,6 +26,7 @@
     "mongoose": "^7.5.2",
     "morgan": "1.10.0",
     "multer": "^1.4.5-lts.1",
+    "netlify-cli": "^16.9.1",
     "serverless-http": "^3.2.0",
     "supertest": "^6.3.3",
     "uuid": "^9.0.1"

@@ -1,15 +1,27 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+const mongoose = require('mongoose')
+const serverless = require("serverless-http"); // для deploy to netlify
 require('dotenv').config()
 
-const serverless = require("serverless-http"); // для deploy to netlify
-
-const authRouter = require('./routes/api/auth')
-const usersRouter = require('./routes/api/users')
-const contactsRouter = require('./routes/api/contacts')
-
 const app = express()
+
+const { DB_HOST, PORT = 3000 } = process.env
+
+mongoose.connect(DB_HOST)
+  .then(() => {
+    app.listen(PORT)
+    console.log("Database connection successful")
+  })
+  .catch((error) => {
+    console.log(error.message)
+    process.exit(1)
+  })
+
+const authRouter = require('../routes/api/auth')
+const usersRouter = require('../routes/api/users')
+const contactsRouter = require('../routes/api/contacts')
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
@@ -31,4 +43,4 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message })
 })
 
-module.exports = serverless(app)
+module.exports.handler = serverless(app)
