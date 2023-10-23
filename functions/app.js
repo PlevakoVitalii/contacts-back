@@ -7,6 +7,8 @@ require('dotenv').config()
 
 const app = express()
 
+const router = express.Router();
+
 const { DB_HOST, PORT = 3000 } = process.env
 
 mongoose.connect(DB_HOST)
@@ -24,6 +26,16 @@ const contactsRouter = require('../routes/api/contacts')
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
+router.get("/", async (req, res, next) => {
+  try {
+    return res.json({
+      "name": "Vasa"
+    })
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
@@ -31,6 +43,7 @@ app.use(express.static("public"));
 
 app.use('/api/auth', authRouter)
 app.use('/api/contacts', contactsRouter)
+app.use('/', router)
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
