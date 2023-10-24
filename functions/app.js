@@ -22,9 +22,11 @@ mongoose.connect(DB_HOST)
     process.exit(1)
   })
 
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
 
-
-router.get("/", async (req, res, next) => {
+router.get("/contacts", async (req, res, next) => {
   try {
 
     const result = await Contact.findById('651996a33db764dbc1c8773b')
@@ -45,6 +47,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 app.use('/', router)
+app.use('/contacts', router)
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
